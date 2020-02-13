@@ -9,7 +9,7 @@ namespace SMS.WebAPI.Repositories.Implementation
     public class MockCouseRepository : ICourseRepository
     {
         private List<Course> _courses = new List<Course>();
-        private List<StudentCourse> _studentCourses = new List<StudentCourse>();
+        private List<Enrollement> _studentCourses = new List<Enrollement>();
 
         public MockCouseRepository()
         {
@@ -32,7 +32,7 @@ namespace SMS.WebAPI.Repositories.Implementation
                 Description = "This course will cover basic and advance computer hardware topics"
             });
 
-            _studentCourses.Add(new StudentCourse()
+            _studentCourses.Add(new Enrollement()
             {
                 Id = 1, CourseId = 1, 
                 StudentId = 1, 
@@ -40,7 +40,7 @@ namespace SMS.WebAPI.Repositories.Implementation
                 StartDate = DateTime.Now, 
                 EndDate = DateTime.Now.AddMonths(10)
             });
-            _studentCourses.Add(new StudentCourse()
+            _studentCourses.Add(new Enrollement()
             {
                 Id = 2,
                 CourseId = 1,
@@ -50,7 +50,7 @@ namespace SMS.WebAPI.Repositories.Implementation
                 EndDate = DateTime.Now.AddMonths(10)
             });
 
-            _studentCourses.Add(new StudentCourse()
+            _studentCourses.Add(new Enrollement()
             {
                 Id = 2,
                 CourseId = 2,
@@ -60,7 +60,7 @@ namespace SMS.WebAPI.Repositories.Implementation
                 EndDate = DateTime.Now.AddMonths(10)
             });
 
-            _studentCourses.Add(new StudentCourse()
+            _studentCourses.Add(new Enrollement()
             {
                 Id = 3,
                 CourseId = 2,

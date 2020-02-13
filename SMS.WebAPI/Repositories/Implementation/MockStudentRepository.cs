@@ -22,7 +22,7 @@ namespace SMS.WebAPI.Repositories.Implementation
             });
             _students.Add(new Student()
             {
-                Id = 1,
+                Id = 2,
                 Name = "Akain Mark",
                 Address = "345, Bernard RD, Maharagama",
                 Email = "Kenul@ThinkAndLearn.com",
@@ -30,7 +30,7 @@ namespace SMS.WebAPI.Repositories.Implementation
             });
             _students.Add(new Student()
             {
-                Id = 1,
+                Id = 3,
                 Name = "Shakila Perera",
                 Address = "34, Gall Rd, Marata",
                 Email = "Kenul@ThinkAndLearn.com",

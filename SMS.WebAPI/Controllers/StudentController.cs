@@ -10,7 +10,7 @@ using SMS.WebAPI.GraphQL;
 
 namespace SMS.WebAPI.Controllers
 {
-    [Route("student")]
+    [Route("graphql")]
     [ApiController]
     public class StudentController : ControllerBase
     {
@@ -39,7 +39,7 @@ namespace SMS.WebAPI.Controllers
                     return BadRequest(result);
                 }
 
-                return Ok(result);
+                return Ok(result.Data);
             }
             catch (Exception ex)
             {

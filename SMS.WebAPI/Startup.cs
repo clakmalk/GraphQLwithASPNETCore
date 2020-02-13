@@ -10,10 +10,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SMS.WebAPI.Data;
 using SMS.WebAPI.GraphQL.Schemas;
 using SMS.WebAPI.GraphQL.Types.EntityTypes;
 using SMS.WebAPI.Repositories;
@@ -45,6 +47,9 @@ namespace WebApplication1
 
             services.AddGraphQL(o => { o.ExposeExceptions = false; })
                     .AddGraphTypes(ServiceLifetime.Scoped);
+
+            services.AddDbContext<SchoolContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,7 +71,7 @@ namespace WebApplication1
                 endpoints.MapControllers();
             });
             app.UseGraphQL<StudentSchema>();
-            app.UseGraphQLPlayground(options: new GraphQLPlaygroundOptions());
+            app.UseGraphiQLServer(new GraphQL.Server.Ui.GraphiQL.GraphiQLOptions() { GraphiQLPath = "/api/graphiql" });
         }
     }
 }

@@ -15,7 +15,7 @@ namespace SMS.WebAPI.GraphQL.Types.RootTypes
             Field<ListGraphType<StudentType>>(
                 "students",
                 resolve: context => studentRepository.GetStudents());
-            Field<ListGraphType<CourseType>>("student", arguments: new QueryArguments(
+            Field<StudentType>("student", arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id", Description = "Student id" }
                 ), resolve: context => studentRepository.GetStudent(context.GetArgument<int>("id")));
         }
