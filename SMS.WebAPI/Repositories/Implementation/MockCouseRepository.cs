@@ -70,9 +70,20 @@ namespace SMS.WebAPI.Repositories.Implementation
                 EndDate = DateTime.Now.AddMonths(10)
             });
         }
+
+        public Course GetCourse(int courseId)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Course> GetCourses()
         {
             return _courses;
+        }
+
+        public List<Student> GetCourseStudents(int courseId)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Course> GetStudentCourses(int studentId)

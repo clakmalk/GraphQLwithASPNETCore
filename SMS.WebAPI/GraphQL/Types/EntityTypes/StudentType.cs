@@ -12,7 +12,7 @@ namespace SMS.WebAPI.GraphQL.Types.EntityTypes
     {
         public StudentType(IStudentRepository studentRepository, ICourseRepository courseRepository)
         {
-            Field(x => x.Id).Description("Student Id");
+            Field(x => x.Id, type: typeof(IdGraphType)).Description("Student Id");
             Field(x => x.Address).Description("Student Address");
             Field(x => x.Email).Description("Student Email");
             Field(x => x.Name).Description("Student name");

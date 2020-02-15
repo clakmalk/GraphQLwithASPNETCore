@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SMS.WebAPI.Data;
 using SMS.WebAPI.GraphQL.Schemas;
 using SMS.WebAPI.GraphQL.Types.EntityTypes;
@@ -35,21 +36,25 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddSingleton<IStudentRepository, MockStudentRepository>();
-            services.AddSingleton<ICourseRepository, MockCouseRepository>();
-            services.AddScoped<IDependencyResolver>(x =>
-                new FuncDependencyResolver(x.GetRequiredService));
-            services.AddTransient<StudentType>();
-            services.AddTransient<CourseType>();
+            services.AddDbContext<SchoolDbContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<ISchema,StudentSchema>();
+            services.AddScoped<IStudentRepository, SqlServerStudentRepository>();
+            services.AddScoped<ICourseRepository, SqlServerCourseRepository>();
+
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+            services.AddScoped<SMS.WebAPI.GraphQL.Schemas.SchoolSchema>();
 
             services.AddGraphQL(o => { o.ExposeExceptions = false; })
-                    .AddGraphTypes(ServiceLifetime.Scoped);
+                .AddGraphTypes(ServiceLifetime.Scoped);
 
-            services.AddDbContext<SchoolContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0).
+                AddMvcOptions( options => options.EnableEndpointRouting = false);
 
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,19 +64,18 @@ namespace WebApplication1
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseGraphQL<SchoolSchema>();
+            app.UseGraphQLPlayground(options: new GraphQLPlaygroundOptions());
 
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-            app.UseGraphQL<StudentSchema>();
-            app.UseGraphiQLServer(new GraphQL.Server.Ui.GraphiQL.GraphiQLOptions() { GraphiQLPath = "/api/graphiql" });
+            app.UseMvc();
         }
     }
 }

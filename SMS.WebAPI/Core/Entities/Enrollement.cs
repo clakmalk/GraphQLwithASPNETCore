@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace SMS.WebAPI.Core.Entities
         private DateTime _endDate = DateTime.Now;
         private string _grade = string.Empty;
 
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get => _id; set => _id = value; }
         public int StudentId { get => _studentId; set => _studentId = value; }
         public int CourseId { get => _courseId; set => _courseId = value; }

@@ -10,5 +10,9 @@ namespace SMS.WebAPI.Repositories
     {
         List<Course> GetCourses();
         List<Course> GetStudentCourses(int studentId);
+
+        Course GetCourse(int courseId);
+
+        List<Student> GetCourseStudents(int courseId);
     }
 }
