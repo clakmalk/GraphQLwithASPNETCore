@@ -10,6 +10,7 @@ namespace SMS.WebAPI.GraphQL.Types.EntityTypes
 {
     public class StudentType : ObjectGraphType<Student>
     {
+        private IStudentRepository studentRepository;
         public StudentType(IStudentRepository studentRepository, ICourseRepository courseRepository)
         {
             Field(x => x.Id, type: typeof(IdGraphType)).Description("Student Id");

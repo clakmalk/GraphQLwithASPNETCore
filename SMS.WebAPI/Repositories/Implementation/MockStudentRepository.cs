@@ -9,6 +9,9 @@ namespace SMS.WebAPI.Repositories.Implementation
     public class MockStudentRepository : IStudentRepository
     {
         private List<Student> _students = new List<Student>();
+
+        public IObservable<Student> WhenStudentCreated => throw new NotImplementedException();
+
         public MockStudentRepository()
 
         {
@@ -49,20 +52,9 @@ namespace SMS.WebAPI.Repositories.Implementation
         }
         
 
-        public Student UpdateStudent(Student student)
+        public Student UpdateStudent(Student newStudent, Student dbStudent)
         {
-            var studentToUpdate = _students.Where(a => a.Id == student.Id).FirstOrDefault();
-            if (studentToUpdate!= null)
-            {
-                studentToUpdate.Address = student.Address;
-                studentToUpdate.Email = student.Email;
-                studentToUpdate.Name = student.Name;
-                studentToUpdate.PhoneNumber = student.PhoneNumber;
-            }else
-            {
-                throw new Exception("Could not find the student provided");
-            }
-            return studentToUpdate;
+            return newStudent;
         }
 
         public Student DeleteStudent(int studentId)

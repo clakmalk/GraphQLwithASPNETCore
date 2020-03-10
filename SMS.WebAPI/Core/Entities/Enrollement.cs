@@ -8,7 +8,6 @@ namespace SMS.WebAPI.Core.Entities
 {
     public class Enrollement
     {
-        private int _id = -1;
         private int _studentId = -1;
         private int _courseId = -1;
         private DateTime _regDate = DateTime.Now;
@@ -16,8 +15,8 @@ namespace SMS.WebAPI.Core.Entities
         private DateTime _endDate = DateTime.Now;
         private string _grade = string.Empty;
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get => _id; set => _id = value; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { set; get; }
         public int StudentId { get => _studentId; set => _studentId = value; }
         public int CourseId { get => _courseId; set => _courseId = value; }
         public DateTime RegDate { get => _regDate; set => _regDate = value; }

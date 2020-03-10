@@ -8,10 +8,11 @@ namespace SMS.WebAPI.Repositories
 {
     public interface IStudentRepository
     {
+        IObservable<Student> WhenStudentCreated { get; }
         public List<Student> GetStudents();
         public Student GetStudent(int studentId);
         public Student AddStudent(Student student);
-        public Student UpdateStudent(Student student);
+        public Student UpdateStudent(Student newStudent, Student dbStudent);
         public Student DeleteStudent(int studentId);
 
     }
