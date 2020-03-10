@@ -12,11 +12,20 @@ namespace SMS.WebAPI.Repositories.Implementation
     public class SqlServerStudentRepository : IStudentRepository
     {
         private SchoolDbContext _dbContext;
-        private readonly Subject<Student> whenStudentCreated;
+        private Subject<Student> whenStudentCreated;
 
-        public SqlServerStudentRepository() => this.whenStudentCreated = new Subject<Student>();
 
-        public IObservable<Student> WhenStudentCreated => this.whenStudentCreated.AsObservable();
+        public IObservable<Student> WhenStudentCreated
+        {
+            get
+            {
+                if (this.whenStudentCreated == null)
+                {
+                    this.whenStudentCreated = new Subject<Student>();
+                }
+                return this.whenStudentCreated.AsObservable();
+            }
+        }
 
         public SqlServerStudentRepository(SchoolDbContext context)
         {
@@ -26,6 +35,7 @@ namespace SMS.WebAPI.Repositories.Implementation
         {
             _dbContext.Set<Student>().Add(student);
             _dbContext.SaveChanges();
+            this.whenStudentCreated.OnNext(student);
             return student;
         }
 
@@ -36,6 +46,7 @@ namespace SMS.WebAPI.Repositories.Implementation
             {
                 _dbContext.Set<Student>().Remove(student);
                 _dbContext.SaveChanges();
+                this.whenStudentCreated.OnNext(student);
                 return student;
             }else
 
@@ -61,6 +72,7 @@ namespace SMS.WebAPI.Repositories.Implementation
             dbStudent.Name = newStudent.Name;
             dbStudent.PhoneNumber = newStudent.PhoneNumber;
             _dbContext.SaveChanges();
+            this.whenStudentCreated.OnNext(dbStudent);
             return dbStudent;
         }
     }

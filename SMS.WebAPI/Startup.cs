@@ -41,17 +41,20 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SchoolDbContext>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Singleton);
 
-            services.AddScoped<IStudentRepository, SqlServerStudentRepository>();
-            services.AddScoped<ICourseRepository, SqlServerCourseRepository>();
+            services.AddSingleton<IStudentRepository, SqlServerStudentRepository>();
+            services.AddSingleton<ICourseRepository, SqlServerCourseRepository>();
 
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
             services.AddScoped<SMS.WebAPI.GraphQL.Schemas.SchoolSchema>();
 
             services.AddGraphQL(o => { o.ExposeExceptions = false; })
-                .AddGraphTypes(ServiceLifetime.Scoped);
-            //services.AddWebSockets();
+                .AddGraphTypes(ServiceLifetime.Scoped)
+                //.AddNewtonsoftJson(deserializerSettings => { }, serializerSettings => { }) // For everything else
+                .AddWebSockets() // Add required services for web socket support
+                .AddDataLoader(); // Add required services for DataLoader support
+                //.AddGraphTypes(typeof(SchoolSchema));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0).
                 AddMvcOptions(options => options.EnableEndpointRouting = false);
@@ -86,8 +89,9 @@ namespace WebApplication1
             app.UseGraphQLWebSockets<SchoolSchema>("/graphql");
             app.UseGraphQL<SchoolSchema>();
             app.UseGraphQLPlayground(options: new GraphQLPlaygroundOptions());
-           
+
             app.UseMvc();
         }
+    }
 
 }
